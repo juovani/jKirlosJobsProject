@@ -1,5 +1,6 @@
 import json
 from serpapi import GoogleSearch
+from secrets import apiKey
 
 
 def offset_calc(values):
@@ -10,7 +11,7 @@ def offset_calc(values):
 for value in range(1, 6):
     offset = offset_calc(value)
     params = {
-        "api_key": "apiKey",
+        "api_key": apiKey,
         "engine": "google_jobs",
         "google_domain": "google.com",
         "q": "software developer",

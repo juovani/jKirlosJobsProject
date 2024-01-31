@@ -10,7 +10,7 @@ def offset_calc(values):
 for value in range(1, 6):
     offset = offset_calc(value)
     params = {
-        "api_key": "f6dafe65015f85ac92d3698fb9a9df8d044d09f084ac94f3f650f69726a0e4a9",
+        "api_key": "apiKey",
         "engine": "google_jobs",
         "google_domain": "google.com",
         "q": "software developer",

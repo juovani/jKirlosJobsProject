@@ -1,5 +1,5 @@
 import sqlite3
-from serpapi import GoogleSearch  # hjbjj
+from serpapi import GoogleSearch
 from secrets import apiKey
 from typing import Tuple
 
@@ -18,14 +18,13 @@ def setup_db(cursor: sqlite3.Cursor):
     location TEXT NOT NULL,
     when_posted TEXT NOT NULL,
     job_desc TEXT,
-    salary TEXT
-    );''')
+    salary TEXT);''')
 
 
 def make_initial_jobs(cursor: sqlite3.Cursor, job_data: dict):
     detected_extensions = job_data.get("detected_extensions")
     try:
-        cursor.execute('''INSERT INTO JOBS (job_title, company_name, location, job_desc, when_posted, salary) 
+        cursor.execute('''INSERT INTO JOBS (job_title, company_name, location, job_desc, when_posted, salary)
                           VALUES (?, ?, ?, ?, ?, ?)''',
                        (job_data.get("title"), job_data.get("company_name"),
                         job_data.get("location", "N/A"), job_data.get("description"),
@@ -71,7 +70,6 @@ def main():
 
         for value in range(1, 6):
             search_save(value, cursor)
-
         close_db(connection)
         print("Data insertion completed successfully.")
     except Exception as e:

@@ -4,10 +4,12 @@ from serpapi import GoogleSearch
 from secrets import apiKey
 from typing import Tuple
 
+
 def open_db(filename: str) -> Tuple[sqlite3.Connection, sqlite3.Cursor]:
     db_connection = sqlite3.connect(filename)
     cursor = db_connection.cursor()
     return db_connection, cursor
+
 
 def setup_db(cursor: sqlite3.Cursor):
     cursor.execute('''CREATE TABLE IF NOT EXISTS jobs(
@@ -16,26 +18,33 @@ def setup_db(cursor: sqlite3.Cursor):
     company_name TEXT NOT NULL,
     location TEXT NOT NULL,
     when_posted TEXT NOT NULL,
-    job_desc TEXT
+    job_desc TEXT,
+    salary TEXT
     );''')
 
+
 def make_initial_jobs(cursor: sqlite3.Cursor, job_data: dict):
+    detected_extensions = job_data.get("detected_extensions")
     try:
-        cursor.execute('''INSERT INTO jobs (job_title, company_name, location, job_desc, when_posted) 
-                          VALUES (?, ?, ?, ?, ?)''',
+        cursor.execute('''INSERT INTO JOBS (job_title, company_name, location, job_desc, when_posted, salary) 
+                          VALUES (?, ?, ?, ?, ?, ?)''',
                        (job_data.get("title"), job_data.get("company_name"),
-                        job_data.get("location"), job_data.get("description"),
-                        "hagdh"))
+                        job_data.get("location", "N/A"), job_data.get("description"),
+                        detected_extensions.get("posted_at", "N/A"),
+                        detected_extensions.get("salary", "N/A")))
     except sqlite3.Error as e:
         print("Error inserting job data:", e)
+
 
 def close_db(connection: sqlite3.Connection):
     connection.commit()
     connection.close()
 
+
 def offset_calc(value):
     offset = (value - 1) * 10
     return offset
+
 
 def search_save(value, cursor):
     params = {
@@ -55,6 +64,7 @@ def search_save(value, cursor):
     for job_data in job_results:
         make_initial_jobs(cursor, job_data)
 
+
 def main():
     try:
         connection, cursor = open_db("your_database.db")
@@ -67,6 +77,7 @@ def main():
         print("Data insertion completed successfully.")
     except Exception as e:
         print("An error occurred:", e)
+
 
 if __name__ == "__main__":
     main()

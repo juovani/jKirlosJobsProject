@@ -1,4 +1,3 @@
-import json
 import sqlite3
 from serpapi import GoogleSearch
 from secrets import apiKey
@@ -81,7 +80,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-# {job_data.get("location")}, {job_data.get("title")}, {job_data.get("company_name")},
-    # {job_data.get("description")}, {job_data.get("posted_at")}

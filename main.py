@@ -18,7 +18,16 @@ def setup_db(cursor: sqlite3.Cursor):
     location TEXT NOT NULL,
     when_posted TEXT NOT NULL,
     job_desc TEXT,
-    salary TEXT);''')
+    salary TEXT
+    );''')
+
+    cursor.execute('''CREATE TABLE IF NOT EXISTS  qualifications(
+    job_id INTEGER PRIMARY KEY,
+    job_title TEXT,
+    job_via TEXT,
+    FOREIGN KEY (job_title) REFERENCES jobs (job_title)
+    ON DELETE CASCADE ON UPDATE NO ACTION
+    );''')
 
 
 def make_initial_jobs(cursor: sqlite3.Cursor, job_data: dict):
@@ -32,6 +41,17 @@ def make_initial_jobs(cursor: sqlite3.Cursor, job_data: dict):
                         detected_extensions.get("salary", "N/A")))
     except sqlite3.Error as e:
         print("Error inserting job data:", e)
+
+
+def make_initial_qualifications(cursor: sqlite3.Cursor, job_data: dict):
+    highlights = job_data.get("job_highlights")
+    try:
+        cursor.execute('''INSERT INTO QUALIFICATIONS(job_title, job_via)
+                          VALUES (?, ?)''',
+                       (job_data.get("title"), job_data.get("via", "N/A")))
+    except sqlite3.Error as e:
+        print("Error inserting job data:", e)
+
 
 
 def close_db(connection: sqlite3.Connection):
@@ -61,6 +81,7 @@ def search_save(value, cursor):
 
     for job_data in job_results:
         make_initial_jobs(cursor, job_data)
+        make_initial_qualifications(cursor, job_data)
 
 
 def main():

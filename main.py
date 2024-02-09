@@ -15,6 +15,7 @@ def setup_db(cursor: sqlite3.Cursor):
     job_id INTEGER PRIMARY KEY,
     job_title TEXT NOT NULL,
     company_name TEXT NOT NULL,
+    remote TEXT,
     location TEXT NOT NULL,
     when_posted TEXT NOT NULL,
     job_desc TEXT,
@@ -24,31 +25,35 @@ def setup_db(cursor: sqlite3.Cursor):
     cursor.execute('''CREATE TABLE IF NOT EXISTS  qualifications(
     job_id INTEGER PRIMARY KEY,
     job_title TEXT,
-    job_via TEXT,
+    company_name TEXT,
+    qualifications TEXT,
     FOREIGN KEY (job_title) REFERENCES jobs (job_title)
+    ON DELETE CASCADE ON UPDATE NO ACTION,
+    FOREIGN KEY (company_name) REFERENCES jobs (company_name)
     ON DELETE CASCADE ON UPDATE NO ACTION
     );''')
 
 
-def make_initial_jobs(cursor: sqlite3.Cursor, job_data: dict):
+def make_initial_jobs(cursor: sqlite3.Cursor, job_data: list):
     detected_extensions = job_data.get("detected_extensions")
     try:
-        cursor.execute('''INSERT INTO JOBS (job_title, company_name, location, job_desc, when_posted, salary)
-                          VALUES (?, ?, ?, ?, ?, ?)''',
+        cursor.execute('''INSERT INTO JOBS (job_title, company_name, location, remote, job_desc, when_posted, salary)
+                          VALUES (?, ?, ?, ?, ?, ?, ?)''',
                        (job_data.get("title"), job_data.get("company_name"),
-                        job_data.get("location", "N/A"), job_data.get("description"),
+                        job_data.get("location", "N/A"),
+                        detected_extensions.get("work_from_home", "N/A"),
+                        job_data.get("description"),
                         detected_extensions.get("posted_at", "N/A"),
                         detected_extensions.get("salary", "N/A")))
     except sqlite3.Error as e:
         print("Error inserting job data:", e)
 
-
-def make_initial_qualifications(cursor: sqlite3.Cursor, job_data: dict):
     highlights = job_data.get("job_highlights")
     try:
-        cursor.execute('''INSERT INTO QUALIFICATIONS(job_title, job_via)
-                          VALUES (?, ?)''',
-                       (job_data.get("title"), job_data.get("via", "N/A")))
+        cursor.execute('''INSERT INTO QUALIFICATIONS(job_title, company_name, qualifications)
+                              VALUES (?, ?, ?)''',
+                       (job_data.get("title"), job_data.get("company_name"),
+                        highlights[0].get("items")[0]))
     except sqlite3.Error as e:
         print("Error inserting job data:", e)
 
@@ -80,7 +85,6 @@ def search_save(value, cursor):
 
     for job_data in job_results:
         make_initial_jobs(cursor, job_data)
-        make_initial_qualifications(cursor, job_data)
 
 
 def main():

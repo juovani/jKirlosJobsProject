@@ -49,7 +49,6 @@ def make_initial_jobs(cursor: sqlite3.Cursor, job_data: list):
                         detected_extensions.get("salary", "N/A")))
     except sqlite3.Error as e:
         print("Error inserting job data:", e)
-
     highlights = job_data.get("job_highlights")
     try:
         cursor.execute('''INSERT INTO QUALIFICATIONS(job_title, company_name, qualifications)

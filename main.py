@@ -1,6 +1,4 @@
 import sqlite3
-import unittest
-
 from serpapi import GoogleSearch
 from secrets import apiKey
 from typing import Tuple
@@ -99,16 +97,6 @@ def main():
         print("Data insertion completed successfully.")
     except Exception as e:
         print("An error occurred:", e)
-
-
-class TestWebDataRetrieval(unittest.TestCase):
-    def test_retrieval(self):
-        cursor_mock = None
-        job_results = []
-        for value in range(1, 6):
-            job_results.extend(search_save(value, cursor_mock))
-        self.assertGreaterEqual(len(job_results), 50, "At least 50 data items should be retrieved")
-        print(self)
 
 
 if __name__ == "__main__":

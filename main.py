@@ -53,7 +53,6 @@ def make_initial_qualifications(cursor: sqlite3.Cursor, job_data: dict):
         print("Error inserting job data:", e)
 
 
-
 def close_db(connection: sqlite3.Connection):
     connection.commit()
     connection.close()

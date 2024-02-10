@@ -10,9 +10,3 @@ def test_search():
     result = cursor.fetchall()
     assert len(result) == 50
     close_db(connection)
-
-
-# Inside test_search.py
-def test_search():
-    # Your test case code here
-    pass

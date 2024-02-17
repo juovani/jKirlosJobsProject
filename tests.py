@@ -1,3 +1,4 @@
+import main
 from main import search_save, open_db, setup_db, close_db
 
 
@@ -10,3 +11,4 @@ def test_search():
     result = cursor.fetchall()
     assert len(result) == 50
     close_db(connection)
+

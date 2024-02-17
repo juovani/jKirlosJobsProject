@@ -1,7 +1,7 @@
 import sqlite3
 from serpapi import GoogleSearch
 from secrets import apiKey
-from typing import Tuple
+from typing import Tuple, List
 
 
 def open_db(filename: str) -> Tuple[sqlite3.Connection, sqlite3.Cursor]:
@@ -84,6 +84,15 @@ def search_save(value, cursor):
 
     for job_data in job_results:
         make_initial_jobs(cursor, job_data)
+
+
+# def get_multiple_pages_of_jobs(num_pages: int) -> List[tuple]:
+#     complete_data = []
+#     for page in range(num_pages):
+#         current_data = search_save(page)
+#         clean_data = clean_data_for_db(current_data)
+#         complete_data.extend(clean_data)
+#     return complete_data
 
 
 def main():

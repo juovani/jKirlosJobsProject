@@ -29,3 +29,7 @@ def test_insert_data():
     finally:
         if conn:
             main.close_db(conn)
+
+def test_read_at_least_300_rows():
+    data = main.read_excel_data("Sprint3Data.xlsx")
+    assert len(data) >= 300

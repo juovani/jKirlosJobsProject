@@ -12,7 +12,7 @@ def test_search():
 
 def test_insert_data():
     try:
-        conn, cursor = main.open_db("TestDB")  # Open a test database
+        conn, cursor = main.open_db("TestDB")
         main.setup_db(cursor)
         sample_job = ("Test Job", "Comp490 Inc", "Bridgewater, MA", "Work really hard and learn a lot",
                       "Tomorrow", None, None, "Yearly")
@@ -28,4 +28,4 @@ def test_insert_data():
         print("Data insertion test failed:", e)
     finally:
         if conn:
-            main.close_db(conn)  # Close the database connection
+            main.close_db(conn)

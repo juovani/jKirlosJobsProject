@@ -12,6 +12,19 @@ def open_db(filename: str) -> Tuple[sqlite3.Connection, sqlite3.Cursor]:
 
 
 def setup_db(cursor: sqlite3.Cursor):
+    cursor.execute('''CREATE TABLE IF NOT EXISTS excel_data(
+            company_name TEXT,
+            posting_age TEXT,
+            job_id TEXT PRIMARY KEY,
+            country TEXT,
+            location TEXT,
+            publications TEXT,
+            salary_max TEXT,
+            salary_min TEXT,
+            salary_type TEXT,
+            job_title TEXT
+            );''')
+
     cursor.execute('''CREATE TABLE IF NOT EXISTS jobs(
     job_id INTEGER PRIMARY KEY,
     job_title TEXT NOT NULL,
@@ -34,26 +47,13 @@ def setup_db(cursor: sqlite3.Cursor):
     ON DELETE CASCADE ON UPDATE NO ACTION
     );''')
 
-    cursor.execute('''CREATE TABLE IF NOT EXISTS excel_data(
-        id INTEGER PRIMARY KEY,
-        company_name TEXT,
-        posting_age TEXT,
-        job_id TEXT,
-        country TEXT,
-        location TEXT,
-        publications TEXT,
-        salary_max TEXT,
-        salary_min TEXT,
-        salary_type TEXT,
-        job_title TEXT
-        );''')
 
 
-def make_initial_jobs_from_excel(cursor, excel_data):
+def make_initial_jobs_from_excel(cursor: sqlite3.Cursor, excel_data):
     for row in excel_data:
         try:
-            cursor.execute('''INSERT INTO excel_data (company_name, posting_age, job_id, country, 
-            location, publications, salary_max, salary_min, csalary_type, job_title)
+            cursor.execute('''INSERT INTO EXCEL_DATA (company_name, posting_age, job_id, country,
+            location, publications, salary_max, salary_min, salary_type, job_title)
                               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', row)
         except sqlite3.Error as e:
             print("Error inserting Excel data:", e)
@@ -114,11 +114,9 @@ def search_save(value, cursor):
 def read_excel_data(filename):
     workbook = openpyxl.load_workbook(filename)
     sheet = workbook.active
-
     data = []
     for row in sheet.iter_rows(values_only=True):
         data.append(row)
-
     return data
 
 

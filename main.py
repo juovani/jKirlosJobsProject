@@ -1,7 +1,7 @@
 import sqlite3
 import openpyxl
 from serpapi import GoogleSearch
-from secrets import apikey
+from secrets import api_key
 from typing import Tuple
 
 
@@ -94,7 +94,7 @@ def offset_calc(value):
 
 def search_save(value, cursor):
     params = {
-        "api_key": apikey,
+        "api_key": api_key,
         "engine": "google_jobs",
         "google_domain": "google.com",
         "q": "software developer",

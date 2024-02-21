@@ -1,5 +1,6 @@
 import main
 
+
 def test_search():
     connection, cursor = main.open_db(":memory:")
     main.setup_db(cursor)
@@ -9,6 +10,7 @@ def test_search():
     result = cursor.fetchall()
     assert len(result) == 50
     main.close_db(connection)
+
 
 def test_insert_data():
     try:
@@ -42,7 +44,6 @@ def test_excel_data_goes_into_table():
         record = cursor.fetchone()
         expected_data = excel_data[0]
         assert record == expected_data, f"Expected: {expected_data}, Actual: {record}"
-
         print("New Excel data goes into table test passed successfully.")
     except Exception as e:
         print("New Excel data goes into table test failed:", e)
@@ -59,4 +60,3 @@ def test_read_at_least_300_rows():
 def test_read_multiple_columns():
     data = main.read_excel_data("Sprint3Data.xlsx")
     assert all(len(row) >= 2 for row in data)
-

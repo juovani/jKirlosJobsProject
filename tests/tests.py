@@ -53,10 +53,10 @@ def test_excel_data_goes_into_table():
 
 
 def test_read_at_least_300_rows():
-    data = main.read_excel_data("../Sprint3Data.xlsx")
+    data = main.read_excel_data("Sprint3Data.xlsx")
     assert len(data) >= 300
 
 
 def test_read_multiple_columns():
-    data = main.read_excel_data("../Sprint3Data.xlsx")
+    data = main.read_excel_data("Sprint3Data.xlsx")
     assert all(len(row) >= 2 for row in data)

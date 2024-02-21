@@ -13,17 +13,17 @@ def open_db(filename: str) -> Tuple[sqlite3.Connection, sqlite3.Cursor]:
 
 def setup_db(cursor: sqlite3.Cursor):
     cursor.execute('''CREATE TABLE IF NOT EXISTS excel_data(
-            company_name TEXT,
-            posting_age TEXT,
-            job_id TEXT PRIMARY KEY,
-            country TEXT,
-            location TEXT,
-            publications TEXT,
-            salary_max TEXT,
-            salary_min TEXT,
-            salary_type TEXT,
-            job_title TEXT
-            );''')
+    company_name TEXT,
+    posting_age TEXT,
+    job_id TEXT PRIMARY KEY,
+    country TEXT,
+    location TEXT,
+    publications TEXT,
+    salary_max TEXT,
+    salary_min TEXT,
+    salary_type TEXT,
+    job_title TEXT
+    );''')
 
     cursor.execute('''CREATE TABLE IF NOT EXISTS jobs(
     job_id INTEGER PRIMARY KEY,
@@ -51,7 +51,8 @@ def setup_db(cursor: sqlite3.Cursor):
 def make_initial_jobs(cursor: sqlite3.Cursor, job_data: list):
     detected_extensions = job_data.get("detected_extensions")
     try:
-        cursor.execute('''INSERT INTO JOBS (job_title, company_name, location, remote, job_desc, when_posted, salary)
+        cursor.execute('''INSERT INTO JOBS (job_title, company_name, location, remote,
+        job_desc, when_posted, salary)
                           VALUES (?, ?, ?, ?, ?, ?, ?)''',
                        (job_data.get("title"), job_data.get("company_name"),
                         job_data.get("location", "N/A"),
@@ -75,7 +76,7 @@ def make_initial_jobs_from_excel(cursor: sqlite3.Cursor, excel_data):
     for row in excel_data:
         try:
             cursor.execute('''INSERT INTO excel_data (company_name, posting_age, job_id, country,
-                        location, publications, salary_max, salary_min, salary_type, job_title)
+            location, publications, salary_max, salary_min, salary_type, job_title)
                                           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', row)
         except sqlite3.Error as e:
             print("Error inserting Excel data:", e)
@@ -105,7 +106,6 @@ def search_save(value, cursor):
     search = GoogleSearch(params)
     results = search.get_dict()
     job_results = results.get("jobs_results", [])
-
     for job_data in job_results:
         make_initial_jobs(cursor, job_data)
 
@@ -123,10 +123,8 @@ def main():
     try:
         connection, cursor = open_db("your_database.db")
         setup_db(cursor)
-
         excel_data = read_excel_data("Sprint3Data.xlsx")
         make_initial_jobs_from_excel(cursor, excel_data)
-
         for value in range(1, 6):
             search_save(value, cursor)
         close_db(connection)

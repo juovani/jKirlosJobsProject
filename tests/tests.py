@@ -1,20 +1,20 @@
 import main
 
 
-# def test_search():
-#     connection, cursor = main.open_db(":memory:")
-#     main.setup_db(cursor)
-#     for value in range(1, 6):
-#         main.search_save(value, cursor)
-#     cursor.execute("SELECT * FROM jobs")
-#     result = cursor.fetchall()
-#     assert len(result) == 50
-#     main.close_db(connection)
+def test_search():
+    connection, cursor = main.open_db(":memory:")
+    main.setup_db(cursor)
+    for value in range(1, 6):
+        main.search_save(value, cursor)
+    cursor.execute("SELECT * FROM jobs")
+    result = cursor.fetchall()
+    assert len(result) == 50
+    main.close_db(connection)
 
 
 def test_insert_data():
     try:
-        conn, cursor = main.open_db("../TestDB")
+        conn, cursor = main.open_db("TestDB")
         main.setup_db(cursor)
         sample_job = ("Test Job", "Comp490 Inc", "Bridgewater, MA", "Work really hard and learn a lot",
                       "Tomorrow", None, None, "Yearly")
@@ -35,7 +35,7 @@ def test_insert_data():
 
 def test_excel_data_goes_into_table():
     try:
-        conn, cursor = main.open_db("../TestDB")
+        conn, cursor = main.open_db("TestDB")
         main.setup_db(cursor)
         excel_data = main.read_excel_data("../Sprint3Data.xlsx")
         main.make_initial_jobs_from_excel(cursor, excel_data)

@@ -1,7 +1,7 @@
 import sqlite3
 import openpyxl
 from serpapi import GoogleSearch
-from .secrets import api_key
+from secrets import api_key
 from typing import Tuple
 
 

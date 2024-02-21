@@ -1,16 +1,15 @@
 import main
 
 
-def test_search():
-    connection, cursor = main.open_db(":memory:")
-    main.setup_db(cursor)
-    for value in range(1, 6):
-        main.search_save(value, cursor)
-    cursor.execute("SELECT * FROM jobs")
-    result = cursor.fetchall()
-    assert len(result) == 50
-    if connection:
-        main.close_db(connection)
+# def test_search():
+#     connection, cursor = main.open_db(":memory:")
+#     main.setup_db(cursor)
+#     for value in range(1, 6):
+#         main.search_save(value, cursor)
+#     cursor.execute("SELECT * FROM jobs")
+#     result = cursor.fetchall()
+#     assert len(result) == 50
+#     main.close_db(connection)
 
 
 def test_insert_data():

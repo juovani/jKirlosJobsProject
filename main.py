@@ -2,7 +2,7 @@ import sqlite3
 import openpyxl
 from serpapi import GoogleSearch
 from secrets import apikey
-from typing import Tuple, List
+from typing import Tuple
 
 
 def open_db(filename: str) -> Tuple[sqlite3.Connection, sqlite3.Cursor]:
@@ -48,17 +48,6 @@ def setup_db(cursor: sqlite3.Cursor):
     );''')
 
 
-
-def make_initial_jobs_from_excel(cursor: sqlite3.Cursor, excel_data):
-    for row in excel_data:
-        try:
-            cursor.execute('''INSERT INTO EXCEL_DATA (company_name, posting_age, job_id, country,
-            location, publications, salary_max, salary_min, salary_type, job_title)
-                              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', row)
-        except sqlite3.Error as e:
-            print("Error inserting Excel data:", e)
-
-
 def make_initial_jobs(cursor: sqlite3.Cursor, job_data: list):
     detected_extensions = job_data.get("detected_extensions")
     try:
@@ -80,6 +69,16 @@ def make_initial_jobs(cursor: sqlite3.Cursor, job_data: list):
                         highlights[0].get("items")[0]))
     except sqlite3.Error as e:
         print("Error inserting job data:", e)
+
+
+def make_initial_jobs_from_excel(cursor: sqlite3.Cursor, excel_data):
+    for row in excel_data:
+        try:
+            cursor.execute('''INSERT INTO excel_data (company_name, posting_age, job_id, country,
+                        location, publications, salary_max, salary_min, salary_type, job_title)
+                                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', row)
+        except sqlite3.Error as e:
+            print("Error inserting Excel data:", e)
 
 
 def close_db(connection: sqlite3.Connection):

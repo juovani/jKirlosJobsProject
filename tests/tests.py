@@ -14,7 +14,7 @@ def test_search():
 
 def test_insert_data():
     try:
-        conn, cursor = main.open_db("TestDB")
+        conn, cursor = main.open_db("../TestDB")
         main.setup_db(cursor)
         sample_job = ("Test Job", "Comp490 Inc", "Bridgewater, MA", "Work really hard and learn a lot",
                       "Tomorrow", None, None, "Yearly")
@@ -35,9 +35,9 @@ def test_insert_data():
 
 def test_excel_data_goes_into_table():
     try:
-        conn, cursor = main.open_db("TestDB")
+        conn, cursor = main.open_db("../TestDB")
         main.setup_db(cursor)
-        excel_data = main.read_excel_data("Sprint3Data.xlsx")
+        excel_data = main.read_excel_data("../Sprint3Data.xlsx")
         main.make_initial_jobs_from_excel(cursor, excel_data)
         cursor.execute("""SELECT *
                           FROM excel_data WHERE id = 1""")
@@ -53,10 +53,10 @@ def test_excel_data_goes_into_table():
 
 
 def test_read_at_least_300_rows():
-    data = main.read_excel_data("Sprint3Data.xlsx")
+    data = main.read_excel_data("../Sprint3Data.xlsx")
     assert len(data) >= 300
 
 
 def test_read_multiple_columns():
-    data = main.read_excel_data("Sprint3Data.xlsx")
+    data = main.read_excel_data("../Sprint3Data.xlsx")
     assert all(len(row) >= 2 for row in data)

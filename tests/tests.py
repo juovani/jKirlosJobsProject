@@ -9,7 +9,8 @@ def test_search():
     cursor.execute("SELECT * FROM jobs")
     result = cursor.fetchall()
     assert len(result) == 50
-    main.close_db(connection)
+    if connection:
+        main.close_db(connection)
 
 
 def test_insert_data():
